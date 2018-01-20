@@ -1,0 +1,55 @@
+image: node:9-alpine
+
+cache:
+  paths:
+  - node_modules
+
+before_script:
+- npm install
+
+stages:
+  - test
+  - build
+  - build-docker
+
+lint:
+  stage: test
+  script:
+  - npm run lint
+
+unit-test:
+  stage: test
+  script:
+  - npm run unit
+
+build:
+  stage: build
+  script:
+  - npm run build
+  artifacts:
+    expire_in: "2 weeks"
+    paths:
+    - dist/
+
+build-docker-master:
+  image: docker:latest
+  stage: build-docker
+  script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - docker build -t "$CI_REGISTRY_IMAGE" .
+    - docker push "$CI_REGISTRY_IMAGE"
+    - docker tag "$CI_REGISTRY_IMAGE" "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG"
+    - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG"
+  only:
+    - master
+
+build-docker:
+  image: docker:latest
+  stage: build-docker
+  script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - docker build -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" .
+    - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG"
+  except:
+    - master
+
