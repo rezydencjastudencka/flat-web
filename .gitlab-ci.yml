@@ -1,5 +1,8 @@
 image: node:9-alpine
 
+variables:
+  KUBE_DOMAIN: flat.kubernetes.tobiasz.memleak.pl
+
 cache:
   paths:
   - node_modules
@@ -8,6 +11,9 @@ stages:
   - test
   - build
   - build-docker
+  - review
+  - cleanup
+  - deploy
 
 lint:
   stage: test
@@ -53,3 +59,41 @@ build-docker:
   except:
     - master
 
+deploy-dev:
+  image: registry.gitlab.memleak.pl:443/flat/flat-api/kubectl
+  stage: deploy
+  script:
+    - command scripts/deploy
+  environment:
+    name: dev
+    url: http://dev.$KUBE_DOMAIN
+  only:
+    - master
+
+review:
+  image: registry.gitlab.memleak.pl:443/flat/flat-api/kubectl
+  stage: review
+  script:
+    - command scripts/deploy
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    url: http://$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
+    on_stop: stop_review
+  only:
+    - branches
+  except:
+    - master
+
+stop_review:
+  image: registry.gitlab.memleak.pl:443/flat/flat-api/kubectl
+  stage: cleanup
+  script:
+    - command scripts/destroy
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    action: stop
+  when: manual
+  only:
+    - branches
+  except:
+    - master
