@@ -1,20 +1,35 @@
 <template>
-<div>
-  <input
-  type="text"
-  name="username"
-  v-model="username"
-  placeholder="Username"/>
-  <br>
-  <input
-    type="password"
-    name="password"
-    v-model="password"
-    placeholder="Password"/>
-  <br>
-  <button
-    @click="login">Sign In</button>
-</div>
+  <v-container fluid grid-list-xl>
+    <v-layout row justify-space-between>
+      <v-flex xs4 offset-xs4>
+        <v-card color="white" class="text--darken-1">
+          <v-card-text>
+            <v-flex xs12>
+            <v-form v-model="valid">
+              <v-text-field
+                label="Username"
+                v-model="username"
+              />
+              <v-text-field
+                label="Password"
+                v-model="password"
+                :type="'password'"
+              />
+              <div class="signInButton">
+                <v-btn
+                  block
+                  color="blue-grey lighten-1"
+                  @click="login"
+                  >Sign In
+                </v-btn>
+              </div>
+            </v-form>
+            </v-flex>
+          </v-card-text>
+        </v-card>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
@@ -32,12 +47,10 @@ export default {
   methods: {
     async login() {
       try {
-        const response = await FlatApi.logIn({
+        await FlatApi.logIn({
           name: this.username,
           password: this.password,
         });
-        this.$store.dispatch('setToken', response.data.token);
-        this.$store.dispatch('setUser', response.data.user);
       } catch (error) {
         this.error = error.response.data.error;
       }
@@ -47,5 +60,8 @@ export default {
 </script>
 
 <style scoped>
+.signInButton{
+  padding: 25px;
+}
 
 </style>
