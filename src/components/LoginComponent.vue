@@ -1,31 +1,32 @@
 <template>
-  <v-container fluid grid-list-xl>
-    <v-layout row justify-space-between>
-      <v-flex xs4 offset-xs4>
-        <v-card color="white" class="text--darken-1">
+  <v-container fluid fill-height>
+    <v-layout justify-center>
+      <v-flex xs10 sm6 md4 xl2 pt-5>
+        <logo class="mb-4"/>
+        <v-card class="elevation-12">
           <v-card-text>
             <v-flex xs12>
-            <v-form v-model="valid">
-              <v-text-field
-                label="Username"
-                v-model="username"
-              />
-              <v-text-field
-                label="Password"
-                v-model="password"
-                :type="'password'"
-              />
-              <div class="signInButton">
-                <v-btn
-                  block
-                  color="blue-grey lighten-1"
-                  @click="login"
-                  >Sign In
-                </v-btn>
-              </div>
-            </v-form>
+              <v-form v-model="valid">
+                <v-text-field
+                  label="Username"
+                  v-model="username"
+                />
+                <v-text-field
+                  label="Password"
+                  v-model="password"
+                  :type="'password'"
+                />
+              </v-form>
             </v-flex>
           </v-card-text>
+          <v-card-actions>
+            <v-btn
+              block
+              color="primary"
+              @click="login"
+            >Sign In
+            </v-btn>
+          </v-card-actions>
         </v-card>
       </v-flex>
     </v-layout>
@@ -34,9 +35,13 @@
 
 <script>
 import FlatApi from '@/services/FlatApi';
+import Logo from '@/components/Logo';
 
 export default {
   name: 'login-component',
+  components: {
+    logo: Logo,
+  },
   data() {
     return {
       username: '',
@@ -60,8 +65,4 @@ export default {
 </script>
 
 <style scoped>
-.signInButton{
-  padding: 25px;
-}
-
 </style>
