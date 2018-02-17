@@ -2,10 +2,10 @@
   <v-container fluid fill-height>
     <v-layout justify-center>
       <v-flex xs10 sm6 md4 xl2 pt-5>
-        <logo class="mb-4"/>
+        <logo class="mb-5 logo"/>
+        <span class="display-3 welcome-message">Welcome to Flat</span>
         <v-card class="elevation-12">
           <v-card-text>
-            <v-flex xs12>
               <v-form v-model="valid">
                 <v-text-field
                   label="Username"
@@ -17,7 +17,6 @@
                   :type="'password'"
                 />
               </v-form>
-            </v-flex>
           </v-card-text>
           <v-card-actions>
             <v-btn
@@ -65,4 +64,11 @@ export default {
 </script>
 
 <style scoped>
+.logo {
+  width: 70%;
+  margin: 0 auto;
+}
+.welcome-message {
+  margin: 0 auto;
+}
 </style>
