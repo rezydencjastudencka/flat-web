@@ -6,7 +6,7 @@
         <span class="display-3 welcome-message">Welcome to Flat</span>
         <v-card class="elevation-12">
           <v-card-text>
-              <v-form v-model="valid">
+              <v-form>
                 <v-text-field
                   label="Username"
                   v-model="username"
@@ -26,6 +26,12 @@
             >Sign In
             </v-btn>
           </v-card-actions>
+          <v-snackbar
+            top
+            v-model="showErrorMessage">
+            {{ errorMessage }}
+            <v-btn flat color="pink" @click.native="showErrorMessage = false">Close</v-btn>
+          </v-snackbar>
         </v-card>
       </v-flex>
     </v-layout>
@@ -45,16 +51,20 @@ export default {
     return {
       username: '',
       password: '',
-      error: null,
+      showErrorMessage: false,
+      errorMessage: '',
     };
   },
   methods: {
+    showErrorMessageCallback() {
+      this.$data.snackbar = true;
+    },
     async login() {
       try {
         await FlatApi.logIn({
           name: this.username,
           password: this.password,
-        });
+        }, this.showErrorMessageCallback);
       } catch (error) {
         this.error = error.response.data.error;
       }
