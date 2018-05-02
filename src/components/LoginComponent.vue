@@ -56,17 +56,20 @@ export default {
     };
   },
   methods: {
-    showErrorMessageCallback() {
-      this.$data.snackbar = true;
-    },
     async login() {
       try {
         await FlatApi.logIn({
           name: this.username,
           password: this.password,
-        }, this.showErrorMessageCallback);
-      } catch (error) {
-        this.error = error.response.data.error;
+        });
+      } catch (e) {
+        if (e instanceof FlatApi.WrongCredentialsException) {
+          this.errorMessage = 'Wrong login or password';
+          this.$data.showErrorMessage = true;
+        } else if (e instanceof FlatApi.SomethingWentWrongException) {
+          this.errorMessage = 'Something went wrong';
+          this.$data.showErrorMessage = true;
+        }
       }
     },
   },
