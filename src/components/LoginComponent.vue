@@ -53,21 +53,24 @@ export default {
       password: '',
       error: null,
       snackbar: false,
-      text: 'Wrong login or password',
+      text: '',
     };
   },
   methods: {
-    showErrorMessage() {
-      this.$data.snackbar = true;
-    },
     async login() {
       try {
         await FlatApi.logIn({
           name: this.username,
           password: this.password,
-        }, this.showErrorMessage);
-      } catch (error) {
-        this.error = error.response.data.error;
+        });
+      } catch (e) {
+        if (e instanceof FlatApi.WrongCredentialsException) {
+          this.text = 'Wrong login or password';
+          this.$data.snackbar = true;
+        } else if (e instanceof FlatApi.SomethingWentWrongException) {
+          this.text = 'Something went wrong';
+          this.$data.snackbar = true;
+        }
       }
     },
   },
