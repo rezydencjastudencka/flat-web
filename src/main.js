@@ -7,6 +7,7 @@ import Vuetify from 'vuetify';
 import App from './App';
 import router from './router';
 import stateStore from './stateStore';
+import apolloProvider from './apolloClient';
 
 Vue.use(Vuetify);
 Vue.config.productionTip = false;
@@ -16,6 +17,7 @@ new Vue({
   el: '#app',
   store: stateStore.createStore(),
   router,
+  provide: apolloProvider.createApolloProvider(),
   components: { App },
   template: '<App/>',
 });
