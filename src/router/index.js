@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import HelloWorld from '@/components/HelloWorld';
+import Expenses from '@/components/Expenses';
 import AppLayout from '@/AppLayout';
 import LoginComponent from '@/components/LoginComponent';
 import 'vuetify/dist/vuetify.min.css';
@@ -21,8 +22,13 @@ export default new Router({
       children: [
         {
           path: '',
+          component: Expenses,
+          name: 'Expenses',
+        },
+        {
+          path: 'home',
           component: HelloWorld,
-          name: 'HelloWorld',
+          name: 'home',
         },
       ],
     },
