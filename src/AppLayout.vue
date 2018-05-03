@@ -44,10 +44,19 @@
       </v-list>
     </v-navigation-drawer>
     <v-toolbar clippedLeft app fixed flat height="64">
-      <logo class="logo"/>
-      <v-toolbar-title>Flat</v-toolbar-title>
+      <v-layout row justify-space-between>
+        <v-toolbar-title>PlaceholderName</v-toolbar-title>
+        <div style="display: flex">
+          <logo class="logo"/>
+          <v-toolbar-title>Flat</v-toolbar-title>
+        </div>
+        <v-toolbar-items>
+          <v-btn flat>Placeholder1</v-btn>
+          <v-btn flat>Placeholder2</v-btn>
+        </v-toolbar-items>
+      </v-layout>
     </v-toolbar>
-    <v-content><router-view/></v-content>
+    <v-layout><router-view/></v-layout>
   </div>
 </template>
 
