@@ -1,41 +1,50 @@
 <template>
-  <v-container fluid fill-height>
-    <v-layout justify-center>
-      <v-flex xs10 sm6 md4 xl2 pt-5>
-        <logo class="mb-5 logo"/>
-        <span class="display-3 welcome-message">Welcome to Flat</span>
-        <v-card class="elevation-12">
-          <v-card-text>
+  <div>
+    <v-toolbar>
+      <v-spacer></v-spacer>
+      <logo class="logo"/>
+      <v-toolbar-title>Flat</v-toolbar-title>
+      <v-spacer></v-spacer>
+    </v-toolbar>
+    <v-container fluid fill-height>
+      <v-layout align-center justify-center>
+        <v-flex xs12 sm8 md4 mt-5>
+          <v-card class="elevation-12">
+            <v-toolbar dark color="primary">
+              <v-toolbar-title>Sign in</v-toolbar-title>
+            </v-toolbar>
+            <v-card-text>
               <v-form>
                 <v-text-field
-                  label="Username"
-                  v-model="username"
-                />
+                  prepend-icon="person"
+                  name="login"
+                  label="Login"
+                  type="text"
+                  v-model="username"/>
                 <v-text-field
+                  prepend-icon="lock"
+                  name="password"
                   label="Password"
-                  v-model="password"
-                  :type="'password'"
-                />
+                  id="password"
+                  type="password"
+                  v-model="password"/>
               </v-form>
-          </v-card-text>
-          <v-card-actions>
-            <v-btn
-              block
-              color="primary"
-              @click="login"
-            >Sign In
-            </v-btn>
-          </v-card-actions>
-          <v-snackbar
-            top
-            v-model="showErrorMessage">
-            {{ errorMessage }}
-            <v-btn flat color="pink" @click.native="showErrorMessage = false">Close</v-btn>
-          </v-snackbar>
-        </v-card>
-      </v-flex>
-    </v-layout>
-  </v-container>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="primary" @click="login">Login</v-btn>
+            </v-card-actions>
+            <v-snackbar
+              top
+              v-model="showErrorMessage">
+              {{ errorMessage }}
+              <v-btn flat color="pink" @click.native="showErrorMessage = false">Close</v-btn>
+            </v-snackbar>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </div>
 </template>
 
 <script>
@@ -77,11 +86,8 @@ export default {
 </script>
 
 <style scoped>
-.logo {
-  width: 70%;
-  margin: 0 auto;
-}
-.welcome-message {
-  margin: 0 auto;
+.logo{
+  height: 2em;
+  width: 2em;
 }
 </style>
