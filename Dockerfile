@@ -1,3 +1,3 @@
-FROM nginx:1-alpine
+FROM iamfreee/docker-nginx-static-spa:latest
 
-COPY dist /usr/share/nginx/html/
+COPY dist /var/www/html/
