@@ -3,9 +3,9 @@ image: node:9-alpine
 variables:
   KUBE_DOMAIN: flat.kubernetes.tobiasz.memleak.pl
 
-cache:
-  paths:
-  - node_modules
+#cache:
+#  paths:
+#  - node_modules
 
 stages:
   - test
@@ -18,14 +18,16 @@ stages:
 lint:
   stage: test
   script:
-  - npm install
-  - npm run lint
+  - rm node_modules && ln -s /cache/flat-web/node_modules .
+  - yarn install --frozen-lockfile 
+  - yarn run lint
 
 build:
   stage: build
   script:
-  - npm install
-  - npm run build
+  - rm node_modules && ln -s /cache/flat-web/node_modules .
+  - yarn install --frozen-lockfile
+  - yarn run build
   artifacts:
     expire_in: "2 weeks"
     paths:
