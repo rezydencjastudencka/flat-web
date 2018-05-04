@@ -5,10 +5,12 @@
       <v-data-table
         :headers="headers"
         :items="expenses"
+        :loading="$apollo.loading"
         disable-initial-sort
         hide-actions
         class="elevation-2"
       >
+        <v-progress-linear slot="progress" color="primary" indeterminate></v-progress-linear>
         <template slot="items" slot-scope="props">
           <td>{{ props.item.name }}</td>
           <td class="text-xs-right">{{ props.item.amount }}</td>
@@ -40,10 +42,13 @@ export default {
         }
       }
     }`,
-      // Static parameters
-      variables: {
-        year: 2018,
-        month: 2,
+      // Reactive parameters
+      variables() {
+        // Use vue reactive properties here
+        return {
+          year: this.$store.state.date.year(),
+          month: this.$store.state.date.month() + 1,
+        };
       },
     },
   },
