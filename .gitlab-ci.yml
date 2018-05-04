@@ -21,12 +21,6 @@ lint:
   - npm install
   - npm run lint
 
-unit-test:
-  stage: test
-  script:
-  - npm install
-  - npm run unit
-
 build:
   stage: build
   script:
