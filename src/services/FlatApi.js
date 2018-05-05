@@ -1,6 +1,5 @@
 import Router from '../router';
-
-const flatApiUrl = 'http://dev.api.flat.kubernetes.tobiasz.memleak.pl/';
+import { getApiUrl } from '../constants';
 
 export default {
   WrongCredentialsException() {
@@ -11,7 +10,7 @@ export default {
   async logIn(credentials) {
     let response;
     try {
-      response = await fetch(`${flatApiUrl}/session/create`, {
+      response = await fetch(`${getApiUrl()}/session/create`, {
         method: 'POST',
         body: JSON.stringify(credentials),
         headers: new Headers({

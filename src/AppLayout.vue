@@ -51,7 +51,7 @@
         <v-spacer/>
         <v-toolbar-items>
           <v-btn flat>Placeholder1</v-btn>
-          <v-btn flat>Placeholder2</v-btn>
+          <DatePicker pickerType="month" v-on:picked-date-change="onPickedDateChange"/>
         </v-toolbar-items>
     </v-toolbar>
     <v-layout><router-view/></v-layout>
@@ -59,12 +59,14 @@
 </template>
 
 <script>
+import DatePicker from '@/components/DatePicker';
 import Logo from '@/components/Logo';
 
 export default {
   name: 'AppLayout',
   components: {
     logo: Logo,
+    DatePicker,
   },
   data() {
     return {
@@ -78,6 +80,11 @@ export default {
       ],
       isNavDrawerClosed: true,
     };
+  },
+  methods: {
+    onPickedDateChange(date) {
+      this.$store.commit('setDate', date);
+    },
   },
 };
 </script>
