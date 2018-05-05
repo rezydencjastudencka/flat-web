@@ -44,14 +44,19 @@
       </v-list>
     </v-navigation-drawer>
     <v-toolbar clippedLeft app fixed flat height="64">
-        <v-toolbar-title>PlaceholderName</v-toolbar-title>
+        <v-toolbar-title>{{ $route.name }}</v-toolbar-title>
         <v-spacer/>
         <logo class="logo"/>
         <v-toolbar-title>Flat</v-toolbar-title>
         <v-spacer/>
         <v-toolbar-items>
-          <v-btn flat>Placeholder1</v-btn>
-          <DatePicker pickerType="month" v-on:picked-date-change="onPickedDateChange"/>
+          <v-btn v-if="$route.meta.id === 'incomes'" flat>Add charge</v-btn>
+          <v-btn v-if="$route.meta.id === 'transfers'" flat>Make transfer</v-btn>
+          <DatePicker
+            v-if="$route.meta.id === 'expenses'"
+            pickerType="month"
+            v-on:picked-date-change="onPickedDateChange"
+          />
         </v-toolbar-items>
     </v-toolbar>
     <v-layout><router-view/></v-layout>

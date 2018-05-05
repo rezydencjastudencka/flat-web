@@ -24,6 +24,9 @@ export default new Router({
           path: '',
           component: Expenses,
           name: 'Expenses',
+          meta: {
+            id: 'expenses',
+          },
         },
         {
           path: 'home',
