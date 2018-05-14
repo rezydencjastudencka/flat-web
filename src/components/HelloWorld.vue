@@ -2,13 +2,20 @@
   <div class="hello">
     <h1>{{ msg }}</h1>
     <h2>Sample global value is: {{ sampleVal }}</h2>
+    <NewCharge/>
   </div>
 </template>
 
 <script>
 
+import NewCharge from '@/components/NewCharge';
+
+
 export default {
   name: 'HelloWorld',
+  components: {
+    NewCharge,
+  },
   data() {
     return {
       msg: 'Welcome to Flat App',
