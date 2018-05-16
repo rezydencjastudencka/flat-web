@@ -5,5 +5,5 @@ export function getApiUrl() {
 }
 
 export function getGraphQLUrl() {
-  return `${apiUrl}graphql`;
+  return `${apiUrl}/graphql`;
 }
