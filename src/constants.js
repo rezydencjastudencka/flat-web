@@ -1,4 +1,4 @@
-const apiUrl = 'http://dev.api.flat.kubernetes.tobiasz.memleak.pl/';
+const apiUrl = 'http://dev.api.flat.kubernetes.tobiasz.memleak.pl';
 
 export function getApiUrl() {
   return apiUrl;
