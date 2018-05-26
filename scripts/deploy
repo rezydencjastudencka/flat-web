@@ -29,7 +29,7 @@ metadata:
   name: $KUBE_NAMESPACE
 EOF
 
-echo "Creating secret"
+echo "Creating secret $CI_REGISTRY"
 
 kubectl create secret -n $KUBE_NAMESPACE \
   docker-registry gitlab-registry \
