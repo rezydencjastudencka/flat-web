@@ -1,0 +1,136 @@
+#!/usr/bin/env bash
+
+set -e
+
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+done
+
+export DEPLOY_ROOT_DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+
+source "$DEPLOY_ROOT_DIR/common.bash"
+
+unset KUBECONFIG
+unset KUBE_CA_PEM_FILE
+unset KUBE_URL
+unset KUBE_CA_PEM
+unset KUBE_TOKEN
+
+URL="new.flat.memleak.pl"
+API_URL="api.new.flat.memleak.pl"
+KUBE_NAMESPACE="fronted"
+NAME="frontend"
+
+#echo "Creating namespace $KUBE_NAMESPACE"
+
+#cat <<EOF | kubectl apply -f -
+#kind: Namespace
+#apiVersion: v1
+#metadata:
+#  name: $KUBE_NAMESPACE
+#EOF
+
+#kubectl create secret -n $KUBE_NAMESPACE \
+#  docker-registry gitlab-registry \
+#  --docker-server="$CI_REGISTRY" \
+#  --docker-username="$CI_REGISTRY_USER" \
+#  --docker-password="$CI_REGISTRY_PASSWORD" \
+#  --docker-email="$GITLAB_USER_EMAIL" \
+#  -o yaml --dry-run | kubectl replace -n $KUBE_NAMESPACE --force -f -
+
+#track="${1-stable}"
+#name="$CI_ENVIRONMENT_SLUG"
+
+#if [[ "$track" != "stable" ]]; then
+#  name="$name-$track"
+#fi
+
+#replicas="1"
+
+#env_track="${track^^}"
+#env_slug="${CI_ENVIRONMENT_SLUG//-/_}"
+#env_slug="${env_slug^^}"
+
+echo "Deploying web"
+cat <<EOF | kubectl apply -n $KUBE_NAMESPACE --force -f -
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: $NAME
+  namespace: $KUBE_NAMESPACE
+  labels:
+    app: $NAME
+    pipeline_id: "$CI_PIPELINE_ID"
+    build_id: "$CI_BUILD_ID"
+    tier: www
+spec:
+  replicas: $replicas
+  selector:
+    matchLabels:
+      app: $NAME
+      tier: www
+  template:
+    metadata:
+      labels:
+        name: $NAME
+        app: $NAME
+        tier: www
+    spec:
+      imagePullSecrets:
+      - name: gitlab-registry
+      containers:
+      - name: $NAME
+        image: $CI_REGISTRY_IMAGE:$CI_REGISTRY_TAG
+        imagePullPolicy: Always
+        ports:
+        - name: $NAME
+          containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: $NAME
+  namespace: $KUBE_NAMESPACE
+  labels:
+    app: $NAME
+    pipeline_id: "$CI_PIPELINE_ID"
+    build_id: "$CI_BUILD_ID"
+spec:
+  ports:
+    - name: $NAME
+      port: 80
+      targetPort: $NAME
+  selector:
+    app: $NAME
+    tier: www
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: $NAME
+  namespace: $KUBE_NAMESPACE
+  labels:
+    app: $NAME
+    pipeline_id: "$CI_PIPELINE_ID"
+    build_id: "$CI_BUILD_ID"
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+  - host: $URL
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: $NAME
+          servicePort: 80
+EOF
+
+echo "Waiting for deployment..."
+kubectl rollout status -n "$KUBE_NAMESPACE" -w "deployment/$NAME"
+
+echo "Application is accessible at: ${URL}"
+echo ""
