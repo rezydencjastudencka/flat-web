@@ -16,6 +16,7 @@ export default {
         headers: new Headers({
           'Content-Type': 'application/json',
         }),
+        credentials: 'include',
       });
     } catch (error) {
       throw new this.SomethingWentWrongException();
