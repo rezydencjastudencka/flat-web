@@ -114,6 +114,13 @@ export default {
       });
     },
   },
+  created() {
+    this.$store.commit('setToolbarButtons',
+      [{ name: 'Add charge', action: () => true }]);
+  },
+  destroyed() {
+    this.$store.commit('setToolbarButtons', []);
+  },
 };
 </script>
 
