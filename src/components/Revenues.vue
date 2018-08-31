@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <ToolbarButton name="Add charge"/>
     <v-layout align-center justify-center>
       <v-flex xs12 sm10 md8>
         <v-data-table
@@ -41,11 +42,13 @@
 <script>
 import gql from 'graphql-tag';
 import DeleteDialog from '@/components/DeleteDialog';
+import ToolbarButton from '@/components/ToolbarButton';
 
 export default {
   name: 'revenues',
   components: {
     DeleteDialog,
+    ToolbarButton,
   },
   apollo: {
     // Query with parameters
@@ -113,13 +116,6 @@ export default {
         this.errorMessage = 'Something went wrong :(';
       });
     },
-  },
-  created() {
-    this.$store.commit('setToolbarButtons',
-      [{ name: 'Add charge', action: () => true }]);
-  },
-  destroyed() {
-    this.$store.commit('setToolbarButtons', []);
   },
 };
 </script>
