@@ -44,14 +44,19 @@
       </v-list>
     </v-navigation-drawer>
     <v-toolbar clippedLeft app fixed flat height="64">
-      <v-toolbar-title>PlaceholderName</v-toolbar-title>
+      <v-toolbar-title>{{ $route.name }}</v-toolbar-title>
       <v-spacer/>
       <logo class="logo"/>
       <v-toolbar-title>Flat</v-toolbar-title>
       <v-spacer/>
       <v-toolbar-items>
-        <v-btn flat>Placeholder1</v-btn>
-        <DatePicker pickerType="month" v-on:picked-date-change="onPickedDateChange"/>
+        <v-btn v-for="button in buttons" :key="button.name" flat @click="button.action">
+          {{ button.name }}
+        </v-btn>
+        <DatePicker
+            pickerType="month"
+            v-on:picked-date-change="onPickedDateChange"
+          />
       </v-toolbar-items>
     </v-toolbar>
     <v-layout>
@@ -90,6 +95,11 @@ export default {
       ],
       isNavDrawerClosed: true,
     };
+  },
+  computed: {
+    buttons() {
+      return this.$store.state.toolbarButtons;
+    },
   },
   methods: {
     onPickedDateChange(date) {

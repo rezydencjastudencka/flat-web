@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <ToolbarButton name="Add charge"/>
     <v-layout align-center justify-center>
       <v-flex xs12 sm10 md8>
         <v-data-table
@@ -41,11 +42,13 @@
 <script>
 import gql from 'graphql-tag';
 import DeleteDialog from '@/components/DeleteDialog';
+import ToolbarButton from '@/components/ToolbarButton';
 
 export default {
   name: 'revenues',
   components: {
     DeleteDialog,
+    ToolbarButton,
   },
   apollo: {
     // Query with parameters

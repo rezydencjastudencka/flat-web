@@ -10,15 +10,18 @@ export default {
   createStore() {
     return new Vuex.Store({
       state: {
-        sample: 10,
+        toolbarButtons: {},
         date: moment(),
       },
       mutations: {
-        set(state) {
-          state.month += 1;
-        },
         setDate(state, newDate) {
           state.date = newDate;
+        },
+        setToolbarButton(state, button) {
+          state.toolbarButtons[button.id] = button;
+        },
+        removeToolbarButton(state, buttonId) {
+          delete state.toolbarButtons[buttonId];
         },
       },
     });
