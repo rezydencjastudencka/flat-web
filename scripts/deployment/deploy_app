@@ -1,0 +1,117 @@
+#!/usr/bin/env bash
+
+APP_REPLICAS="${APP_REPLICAS:-1}"
+
+echo "Deploying WEB (url: $URL track: $TRACK, replicas: $APP_REPLICAS) with $IMAGE_NAME:$IMAGE_VERSION ..."
+
+cat <<EOF | kubectl apply -n $KUBE_NAMESPACE --force -f -
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: $WEB_NAME
+  labels:
+    track: "$TRACK"
+    app: "$APP_NAME"
+    tier: web
+    pipeline: "$PIPELINE_ID"
+    build: "$BUILD"
+spec:
+  replicas: $APP_REPLICAS
+  selector:
+    matchLabels:
+      tier: web
+      track: "$TRACK"
+      app: "$APP_NAME"
+  template:
+    metadata:
+      labels:
+        name: "$WEB_NAME"
+        track: "$TRACK"
+        app: "$APP_NAME"
+        tier: web
+        pipeline: "$PIPELINE"
+        build: "$BUILD"
+    spec:
+      imagePullSecrets:
+      - name: gitlab-registry-pernament
+      containers:
+      - name: app
+        image: "$IMAGE_NAME:$IMAGE_VERSION"
+        imagePullPolicy: Always
+        ports:
+        - name: web
+          containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: $WEB_NAME
+  labels:
+    track: "$TRACK"
+    pipeline_id: "$PIPELINE"
+    build_id: "$BUILD"
+    app: "$APP_NAME"
+    tier: web
+spec:
+  type: NodePort
+  ports:
+    - name: web
+      port: 80
+      targetPort: web
+  selector:
+    track: $TRACK
+    tier: web
+    app: "$APP_NAME"
+---
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: $WEB_TLS_NAME
+  labels:
+    track: "$TRACK"
+    pipeline_id: "$PIPELINE"
+    build_id: "$BUILD"
+    app: "$APP_NAME"
+    tier: web
+spec:
+  secretName: $WEB_TLS_NAME
+  issuerRef:
+    name: letsencrypt-prod
+  commonName: $URL
+  dnsNames:
+  - $URL
+  acme:
+    config:
+    - http01:
+        ingress: $WEB_NAME
+      domains:
+      - $URL
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: $WEB_NAME
+  namespace: $KUBE_NAMESPACE
+  labels:
+    track: $TRACK
+    pipeline_id: "$PIPELINE"
+    build_id: "$BUILD"
+    app: "$APP_NAME"
+    tier: web
+spec:
+  tls:
+  - secretName: $WEB_TLS_NAME
+  rules:
+  - host: $URL
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: $WEB_NAME
+          servicePort: 80
+EOF
+
+echo "Waiting for deployment..."
+kubectl rollout status -n "$KUBE_NAMESPACE" -w "deployment/$WEB_NAME"
+
+
