@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-kubectl delete all,ing -l "app=${CI_ENVIRONMENT_SLUG}" -n "$KUBE_NAMESPACE"
