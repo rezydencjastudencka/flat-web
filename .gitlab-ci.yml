@@ -1,7 +1,7 @@
 image: node:9-alpine
 
 variables:
-  KUBE_DOMAIN: flat.kubernetes.tobiasz.memleak.pl
+  KUBE_DOMAIN: flat.k8s.kazik.memleak.pl
 
 stages:
   - test
@@ -54,7 +54,7 @@ deploy-dev:
   image: registry.gitlab.memleak.pl:443/flat/flat-api/kubectl
   stage: deploy
   script:
-    - command scripts/deploy
+    - command scripts/deployment/deploy
   environment:
     name: dev
     url: http://dev.$KUBE_DOMAIN
@@ -80,7 +80,7 @@ review:
   image: registry.gitlab.memleak.pl:443/flat/flat-api/kubectl
   stage: review
   script:
-    - command scripts/deploy
+    - command scripts/deployment/deploy
   environment:
     name: review/$CI_COMMIT_REF_NAME
     url: http://$CI_ENVIRONMENT_SLUG.$KUBE_DOMAIN
