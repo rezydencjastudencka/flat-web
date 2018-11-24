@@ -61,9 +61,11 @@ export default {
         amount,
         date,
         fromUser {
+          id,
           username
         }
         toUsers {
+          id,
           username
         }
       }
