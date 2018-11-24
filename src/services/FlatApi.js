@@ -7,7 +7,7 @@ export default {
   SomethingWentWrongException() {
   },
 
-  async logIn(credentials) {
+  async logIn(credentials, next) {
     let response;
     try {
       response = await fetch(`${getApiUrl()}/session/create`, {
@@ -23,7 +23,7 @@ export default {
     }
 
     if (response.status === 200) {
-      Router.push('/');
+      Router.push(next);
     } else {
       throw new this.WrongCredentialsException();
     }

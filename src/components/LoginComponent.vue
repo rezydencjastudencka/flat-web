@@ -70,7 +70,7 @@ export default {
         await FlatApi.logIn({
           name: this.username,
           password: this.password,
-        });
+        }, this.$route.query.next || '/');
       } catch (e) {
         if (e instanceof FlatApi.WrongCredentialsException) {
           this.errorMessage = 'Wrong login or password';
