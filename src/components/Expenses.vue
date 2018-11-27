@@ -56,9 +56,9 @@ export default {
     return {
       headers: [
         { text: 'Name', value: 'name', align: 'left' },
-        { text: 'Amount', value: 'amount' },
-        { text: 'Date', value: 'date' },
-        { text: 'From', value: 'from' },
+        { text: 'Amount', value: 'amount', align: 'right' },
+        { text: 'Date', value: 'date', align: 'right' },
+        { text: 'From', value: 'from', align: 'right' },
       ],
       expenses: [],
     };
