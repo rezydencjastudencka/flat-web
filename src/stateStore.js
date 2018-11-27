@@ -18,10 +18,10 @@ export default {
           state.date = newDate;
         },
         setToolbarButton(state, button) {
-          state.toolbarButtons[button.id] = button;
+          Vue.set(state.toolbarButtons, button.id, button);
         },
         removeToolbarButton(state, buttonId) {
-          delete state.toolbarButtons[buttonId];
+          Vue.delete(state.toolbarButtons, buttonId);
         },
       },
     });

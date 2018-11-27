@@ -1,6 +1,7 @@
+<template><span/></template>
 <script>
 export default {
-  name: 'revenues',
+  name: 'ToolbarButton',
   props: {
     name: {
       type: String,

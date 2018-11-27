@@ -1,4 +1,4 @@
-const apiUrl = 'https://api.new.flat.memleak.pl';
+const apiUrl = 'https://api.flat.memleak.pl';
 
 export function getApiUrl() {
   return apiUrl;

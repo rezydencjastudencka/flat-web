@@ -1,7 +1,6 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    <h2>Sample global value is: {{ sampleVal }}</h2>
   </div>
 </template>
 
@@ -12,7 +11,6 @@ export default {
   data() {
     return {
       msg: 'Welcome to Flat App',
-      sampleVal: this.$store.state.sample,
     };
   },
 };

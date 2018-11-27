@@ -1,6 +1,8 @@
 <template>
   <v-dialog v-model="datePicker.isShown" persistent max-width="290">
-    <v-btn flat slot="activator" class="picker-btn">Pick {{ pickerType }}</v-btn>
+    <v-btn flat style="height: 64px; margin: 0;" slot="activator">
+      Pick {{ pickerType }}
+    </v-btn>
     <v-card>
       <v-date-picker
         ref="picker"
@@ -44,10 +46,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.picker-btn{
-  margin: 0;
-  height: 64px;
-}
-</style>
