@@ -41,12 +41,11 @@
             </v-menu>
           </v-flex>
           <v-flex>
-            <v-select
+            <v-autocomplete
               :loading="$apollo.loading"
-              :items="users.map(x => x.username)"
+              :items="users ? users.map(x => x.username): []"
               v-model="newRevenue.checkedUsers"
               label="Select users to debit"
-              autocomplete
               multiple
               cache-items
               chips
