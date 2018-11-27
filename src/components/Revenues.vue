@@ -88,9 +88,12 @@ export default {
     return {
       headers: [
         { text: 'Name', value: 'name', align: 'left' },
-        { text: 'Amount', value: 'amount' },
-        { text: 'Date', value: 'date' },
-        { text: 'To', value: 'to' },
+        { text: 'Amount', value: 'amount', align: 'right' },
+        { text: 'Date', value: 'date', align: 'right' },
+        { text: 'To', value: 'to', align: 'right' },
+        {
+          text: '', value: '', align: 'right', sortable: false,
+        },
       ],
       isNewRevenueShown: false,
       revenues: [],
