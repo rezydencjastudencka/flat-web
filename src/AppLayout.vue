@@ -110,10 +110,6 @@ export default {
 </script>
 
 <style>
-  .rotated {
-    transform: rotate(180deg);
-  }
-
   .logo {
     height: 2em;
     width: 2em;

@@ -1,6 +1,7 @@
 <template>
   <v-container>
-    <ToolbarButton name="Add charge"/>
+    <NewRevenue revenueType="Revenue" :isShown.sync="isNewRevenueShown"/>
+    <ToolbarButton name="Add revenue" @click="isNewRevenueShown = true"/>
     <v-layout align-center justify-center>
       <v-flex xs12 sm10 md8>
         <v-data-table
@@ -43,33 +44,36 @@
 import gql from 'graphql-tag';
 import DeleteDialog from '@/components/DeleteDialog';
 import ToolbarButton from '@/components/ToolbarButton';
+import NewRevenue from '@/components/NewRevenue';
 
 export default {
   name: 'revenues',
   components: {
     DeleteDialog,
     ToolbarButton,
+    NewRevenue,
   },
   apollo: {
     // Query with parameters
     revenues: {
       // gql query
-      query: gql`query revenues($year: Int!, $month: Int!) {
-      revenues(year: $year, month: $month) {
-        id,
-        name,
-        amount,
-        date,
-        fromUser {
-          id,
-          username
-        }
-        toUsers {
-          id,
-          username
-        }
-      }
-    }`,
+      query:
+        gql`query revenues($year: Int!, $month: Int!) {
+          revenues(year: $year, month: $month) {
+            id,
+            name,
+            amount,
+            date,
+            fromUser {
+              id,
+              username
+            }
+            toUsers {
+              id,
+              username
+            }
+          }
+        }`,
       // Reactive parameters
       variables() {
         // Use vue reactive properties here
@@ -88,6 +92,7 @@ export default {
         { text: 'Date', value: 'date' },
         { text: 'To', value: 'to' },
       ],
+      isNewRevenueShown: false,
       revenues: [],
       showErrorMessage: false,
       errorMessage: '',
