@@ -25,7 +25,7 @@
                 <v-icon color="teal">edit</v-icon>
               </v-btn>
               <DeleteDialog deletingItem="revenue"
-                            @confirm="deleteCharge(props.item)"/>
+                            @confirm="deleteRevenue(props.item)"/>
             </td>
           </template>
         </v-data-table>
@@ -99,21 +99,22 @@ export default {
     };
   },
   methods: {
-    deleteCharge(item) {
+    deleteRevenue(item) {
       this.$apollo.mutate({
         // Query
-        mutation: gql`mutation ($id: ID!) {
-        deleteCharge(id: $id){
-          status
-        }
-      }`,
+        mutation:
+          gql`mutation ($id: ID!) {
+            deleteRevenue(id: $id){
+              status
+            }
+          }`,
         // Parameters
         variables: {
           id: item.id,
         },
       }).then((response) => {
         // Result
-        if (response.data.deleteCharge.status === 'NOT_FOUND') {
+        if (response.data.deleteRevenue.status === 'NOT_FOUND') {
           this.showErrorMessage = true;
           this.errorMessage = 'Revenue not found';
         }
