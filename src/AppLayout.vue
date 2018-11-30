@@ -90,7 +90,11 @@ export default {
           icon: 'trending_up',
           action: () => this.$router.push({ name: 'Revenues' }),
         },
-        { title: 'Transfers', icon: 'compare_arrows', action: () => true },
+        {
+          title: 'Transfers',
+          icon: 'compare_arrows',
+          action: () => this.$router.push({ name: 'Transfers' }),
+        },
         { title: 'About', icon: 'question_answer', action: () => true },
       ],
       isNavDrawerClosed: true,
