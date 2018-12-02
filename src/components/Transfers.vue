@@ -44,6 +44,7 @@
 import DeleteDialog from '@/components/DeleteDialog';
 import NewTransfer from '@/components/NewTransfer';
 import ToolbarButton from '@/components/ToolbarButton';
+import { pollInterval } from '@/constants';
 import gql from 'graphql-tag';
 
 export default {
@@ -92,6 +93,7 @@ export default {
           incoming,
         };
       }),
+      pollInterval,
     },
   },
   data() {
