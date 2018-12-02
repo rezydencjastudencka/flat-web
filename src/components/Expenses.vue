@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import { pollInterval } from '@/constants';
 import gql from 'graphql-tag';
 
 export default {
@@ -51,6 +52,7 @@ export default {
         };
       },
     },
+    pollInterval,
   },
   data() {
     return {

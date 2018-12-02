@@ -22,9 +22,11 @@
             </td>
             <td class="text-xs-right">{{ props.item.date }}</td>
             <td class="text-xs-right">{{ props.item.user.username }}</td>
-            <DeleteDialog deletingItem="transfer"
-                          @confirm="deleteTransfer(props.item)"
-                          v-show="!incoming"/>
+            <td>
+              <DeleteDialog deletingItem="transfer"
+                            @confirm="deleteTransfer(props.item)"
+                            v-show="!props.item.incoming"/>
+            </td>
           </template>
         </v-data-table>
       </v-flex>
@@ -42,6 +44,7 @@
 import DeleteDialog from '@/components/DeleteDialog';
 import NewTransfer from '@/components/NewTransfer';
 import ToolbarButton from '@/components/ToolbarButton';
+import { pollInterval } from '@/constants';
 import gql from 'graphql-tag';
 
 export default {
@@ -90,6 +93,7 @@ export default {
           incoming,
         };
       }),
+      pollInterval,
     },
   },
   data() {
@@ -104,6 +108,8 @@ export default {
         },
       ],
       isNewTransferShown: false,
+      showErrorMessage: false,
+      errorMessage: '',
     };
   },
   methods: {

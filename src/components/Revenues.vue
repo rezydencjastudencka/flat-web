@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import { pollInterval } from '@/constants';
 import gql from 'graphql-tag';
 import DeleteDialog from '@/components/DeleteDialog';
 import ToolbarButton from '@/components/ToolbarButton';
@@ -82,6 +83,7 @@ export default {
           month: this.$store.state.date.month() + 1,
         };
       },
+      pollInterval,
     },
   },
   data() {
