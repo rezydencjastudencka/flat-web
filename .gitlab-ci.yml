@@ -70,7 +70,7 @@ deploy-production:
     - command scripts/deployment/deploy_prod
   environment:
     name: production
-    url: https://new.flat.memleak.pl
+    url: https://flat.memleak.pl
   when: manual
   only:
     - master
