@@ -22,14 +22,24 @@
             </td>
             <td class="text-xs-right">{{ props.item.date }}</td>
             <td class="text-xs-right">{{ props.item.user.username }}</td>
+            <DeleteDialog deletingItem="transfer"
+                          @confirm="deleteTransfer(props.item)"
+                          v-show="!incoming"/>
           </template>
         </v-data-table>
       </v-flex>
     </v-layout>
+    <v-snackbar
+      top
+      v-model="showErrorMessage">
+      {{ errorMessage }}
+      <v-btn flat color="pink" @click.native="showErrorMessage = false">Close</v-btn>
+    </v-snackbar>
   </v-container>
 </template>
 
 <script>
+import DeleteDialog from '@/components/DeleteDialog';
 import NewTransfer from '@/components/NewTransfer';
 import ToolbarButton from '@/components/ToolbarButton';
 import gql from 'graphql-tag';
@@ -37,6 +47,7 @@ import gql from 'graphql-tag';
 export default {
   name: 'Transfers',
   components: {
+    DeleteDialog,
     NewTransfer,
     ToolbarButton,
   },
@@ -45,6 +56,7 @@ export default {
       query:
         gql`query transfers($year: Int!, $month: Int!) {
           transfers(year: $year, month: $month) {
+            id
             amount
             date
             name
@@ -68,8 +80,9 @@ export default {
         };
       },
       update: data => data.transfers.map((transfer) => {
-        const incoming = transfer.toUser.id === data.me.id;
+        const incoming = transfer.fromUser.id !== data.me.id;
         return {
+          id: transfer.id,
           amount: transfer.amount,
           date: transfer.date,
           name: transfer.name,
@@ -86,9 +99,40 @@ export default {
         { text: 'Amount', value: 'amount', align: 'right' },
         { text: 'Date', value: 'date', align: 'right' },
         { text: 'User', value: 'from', align: 'right' },
+        {
+          text: '', value: '', align: 'right', sortable: false,
+        },
       ],
       isNewTransferShown: false,
     };
+  },
+  methods: {
+    deleteTransfer(item) {
+      this.$apollo.mutate({
+        // Query
+        mutation:
+          gql`mutation ($id: ID!) {
+            deleteTransfer(id: $id){
+              status
+            }
+          }`,
+        // Parameters
+        variables: {
+          id: item.id,
+        },
+      }).then((response) => {
+        // Result
+        if (response.data.deleteTransfer.status === 'NOT_FOUND') {
+          this.showErrorMessage = true;
+          this.errorMessage = 'Transfer not found';
+        }
+        this.$apollo.queries.transfers.refetch();
+      }).catch(() => {
+        // Error
+        this.showErrorMessage = true;
+        this.errorMessage = 'Something went wrong :(';
+      });
+    },
   },
 };
 </script>
