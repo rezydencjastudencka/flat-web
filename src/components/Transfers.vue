@@ -22,9 +22,11 @@
             </td>
             <td class="text-xs-right">{{ props.item.date }}</td>
             <td class="text-xs-right">{{ props.item.user.username }}</td>
-            <DeleteDialog deletingItem="transfer"
-                          @confirm="deleteTransfer(props.item)"
-                          v-show="!incoming"/>
+            <td>
+              <DeleteDialog deletingItem="transfer"
+                            @confirm="deleteTransfer(props.item)"
+                            v-show="!props.item.incoming"/>
+            </td>
           </template>
         </v-data-table>
       </v-flex>
@@ -104,6 +106,8 @@ export default {
         },
       ],
       isNewTransferShown: false,
+      showErrorMessage: false,
+      errorMessage: '',
     };
   },
   methods: {
