@@ -1,5 +1,7 @@
 <template>
   <v-container>
+    <NewTransfer :isShown.sync="isNewTransferShown"/>
+    <ToolbarButton name="Add transfer" @click="isNewTransferShown = true"/>
     <v-layout align-center justify-center>
       <v-flex xs12 sm10 md8>
         <v-data-table
@@ -28,10 +30,16 @@
 </template>
 
 <script>
+import NewTransfer from '@/components/NewTransfer';
+import ToolbarButton from '@/components/ToolbarButton';
 import gql from 'graphql-tag';
 
 export default {
   name: 'Transfers',
+  components: {
+    NewTransfer,
+    ToolbarButton,
+  },
   apollo: {
     transfers: {
       query:
@@ -79,6 +87,7 @@ export default {
         { text: 'Date', value: 'date', align: 'right' },
         { text: 'User', value: 'from', align: 'right' },
       ],
+      isNewTransferShown: false,
     };
   },
 };
