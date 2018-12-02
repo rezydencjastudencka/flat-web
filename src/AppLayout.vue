@@ -95,7 +95,11 @@ export default {
           icon: 'compare_arrows',
           action: () => this.$router.push({ name: 'Transfers' }),
         },
-        { title: 'About', icon: 'question_answer', action: () => true },
+        {
+          title: 'Summary',
+          icon: 'attach_money',
+          action: () => this.$router.push({ name: 'Summary' }),
+        },
       ],
       isNavDrawerClosed: true,
     };

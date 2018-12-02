@@ -5,6 +5,7 @@ import Transfers from '@/components/Transfers';
 import AppLayout from '@/AppLayout';
 import LoginComponent from '@/components/LoginComponent';
 import Revenues from '@/components/Revenues';
+import Summary from '@/components/Summary';
 import 'vuetify/dist/vuetify.min.css';
 
 Vue.use(Router);
@@ -35,6 +36,11 @@ export default new Router({
           path: 'transfers',
           component: Transfers,
           name: 'Transfers',
+        },
+        {
+          path: 'summary',
+          component: Summary,
+          name: 'Summary',
         },
       ],
     },
