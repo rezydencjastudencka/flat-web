@@ -16,7 +16,7 @@
               <img :src="userAvatar">
             </v-list-tile-avatar>
             <v-list-tile-content>
-              <v-list-tile-title>{{ userName }}</v-list-tile-title>
+              <v-list-tile-title>{{ me ? me.username : "" }}</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
         </v-list>
@@ -68,6 +68,7 @@
 <script>
 import DatePicker from '@/components/DatePicker';
 import Logo from '@/components/Logo';
+import gql from 'graphql-tag';
 
 export default {
   name: 'AppLayout',
@@ -75,9 +76,19 @@ export default {
     logo: Logo,
     DatePicker,
   },
+  apollo: {
+    me: {
+      query:
+        gql`query me {
+          me {
+            id
+            username
+          }
+        }`,
+    },
+  },
   data() {
     return {
-      userName: 'Random User',
       userAvatar: 'https://i.stack.imgur.com/34AD2.jpg',
       items: [
         {
