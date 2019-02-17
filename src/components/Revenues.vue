@@ -3,7 +3,7 @@
     <NewRevenue revenueType="Revenue" :isShown.sync="isNewRevenueShown"/>
     <ToolbarButton name="Add revenue" @click="isNewRevenueShown = true"/>
     <v-layout align-center justify-center>
-      <v-flex xs12 sm10 md8>
+      <v-flex xs12 sm12 md10>
         <v-data-table
           :headers="headers"
           :items="revenues"
@@ -15,6 +15,7 @@
           <v-progress-linear slot="progress" color="primary" indeterminate></v-progress-linear>
           <template slot="items" slot-scope="props">
             <td>{{ props.item.name }}</td>
+            <td>{{ props.item.category ? props.item.category.name : ""}}</td>
             <td class="text-xs-right">{{ props.item.amount }}</td>
             <td class="text-xs-right">{{ props.item.date }}</td>
             <td class="text-xs-right">
@@ -73,6 +74,10 @@ export default {
               id,
               username
             }
+            category {
+              id
+              name
+            }
           }
         }`,
       // Reactive parameters
@@ -90,6 +95,7 @@ export default {
     return {
       headers: [
         { text: 'Name', value: 'name', align: 'left' },
+        { text: 'Category', value: 'category', align: 'left' },
         { text: 'Amount', value: 'amount', align: 'right' },
         { text: 'Date', value: 'date', align: 'right' },
         { text: 'To', value: 'to', align: 'right' },
