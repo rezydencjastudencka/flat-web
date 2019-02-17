@@ -43,6 +43,16 @@
           <v-flex>
             <v-autocomplete
               :loading="$apollo.loading"
+              :items="categories ? categories.map(x => x.name): []"
+              v-model="newRevenue.category"
+              label="Select category"
+              cache-items
+              required
+            />
+          </v-flex>
+          <v-flex>
+            <v-autocomplete
+              :loading="$apollo.loading"
               :items="users ? users.map(x => x.username): []"
               v-model="newRevenue.checkedUsers"
               label="Select users to debit"
@@ -94,6 +104,15 @@ export default {
           }
         }`,
     },
+    categories: {
+      query:
+        gql`query {
+          categories {
+            id
+            name
+          }
+        }`,
+    },
   },
   data() {
     return {
@@ -105,6 +124,7 @@ export default {
         amount: '',
         date: moment().format('YYYY-MM-DD'),
         checkedUsers: [],
+        category: [],
       },
     };
   },
@@ -113,13 +133,16 @@ export default {
       this.$emit('update:isShown', value);
     },
     addRevenue(newRevenue, users) {
+      const category = this.categories
+        .filter(cat => newRevenue.category.includes(cat.name))
+        .map(cat => cat.id);
       const toUsers = users
         .filter(user => newRevenue.checkedUsers.includes(user.username))
         .map(user => user.id);
       this.$apollo.mutate({
         mutation:
-          gql`mutation ($amount: String!, $date: Date!, $name: String!, $to: [ID!]) {
-            addRevenue(amount: $amount, date: $date, name: $name, to: $to) {
+          gql`mutation ($amount: String!, $date: Date!, $name: String!, $to: [ID!], $category: ID!) {
+            addRevenue(amount: $amount, date: $date, name: $name, to: $to, category: $category) {
               id
               name
               amount
@@ -133,6 +156,10 @@ export default {
                 id
                 username
               }
+              category {
+                id
+                name
+              }
             }
           }`,
         variables:
@@ -141,6 +168,7 @@ export default {
             amount: newRevenue.amount,
             date: newRevenue.date,
             to: toUsers,
+            category: category[0],
           },
       }).then(() => {
         this.changeIsShown(false);
