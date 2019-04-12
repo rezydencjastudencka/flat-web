@@ -6,6 +6,7 @@ import AppLayout from '@/AppLayout';
 import LoginComponent from '@/components/LoginComponent';
 import Revenues from '@/components/Revenues';
 import Summary from '@/components/Summary';
+import PrivacyPolicy from '@/components/PrivacyPolicy';
 import 'vuetify/dist/vuetify.min.css';
 
 Vue.use(Router);
@@ -17,6 +18,11 @@ export default new Router({
       path: '/login',
       name: 'Sign In',
       component: LoginComponent,
+    },
+    {
+      path: '/privacy',
+      name: 'Privacy Policy',
+      component: PrivacyPolicy,
     },
     {
       path: '/',
